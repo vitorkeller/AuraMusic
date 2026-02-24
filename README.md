@@ -1,4 +1,4 @@
-# 🎵 Player Music
+# 🎵 Aura Music
 
 ## Metodologia: Abordagem Baseada em Projeto
 Este projeto foi concebido como um desafio prático, com o objetivo de projetar, desenvolver e colocar em produção uma aplicação web funcional. A abordagem prioriza a resolução de um problema de domínio real, explorando tecnologias tanto no lado do cliente (frontend) quanto no lado do servidor (backend), além de aplicar boas práticas de engenharia de software e infraestrutura.
@@ -11,7 +11,7 @@ O projeto adota uma arquitetura **Monolítica** modular no backend. Essa escolha
 Utilizaremos o padrão arquitetural **MVC** (Model-View-Controller) no design da API e aplicaremos Padrões de Projeto como **Repository** (para abstração de acesso a dados) e **Singleton** (no gerenciamento de injeção de dependências).
 
 ## Tecnologias e Justificativas
-* **Frontend:** React. 
+* **Frontend:** React | Next.js | Typescript | Tailwind CSS. 
   * *Justificativa:* Permite a criação de Single Page Applications (SPAs). Isso é vital para um player de música, garantindo que o usuário navegue pelo sistema sem que o áudio seja interrompido por recarregamentos de página.
 * **Backend:** Java (Spring Boot). 
   * *Justificativa:* Framework robusto e padronizado para a criação de APIs REST, com excelente suporte integrado para segurança corporativa (Spring Security) e persistência de dados.
