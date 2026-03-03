@@ -26,3 +26,7 @@ Utilizaremos o padrão arquitetural **MVC** (Model-View-Controller) no design da
 
 ## Engenharia e Produção (Deploy e CI/CD)
 O repositório está configurado com um pipeline de Integração e Entrega Contínuas (CI/CD). A cada novo *push* na branch principal, o pipeline executa automaticamente os testes unitários. Se aprovados, ocorre o processo de *build* e o deploy é realizado automaticamente em um provedor de nuvem, deixando o sistema em ambiente de produção online de forma ágil e segura.
+
+## Atribuições e Responsabilidades
+- Protótipo e Front-end: [Lucas Moraes](https://github.com/hub-Moraes).
+- Banco de Dados e Back-end: [Vitor Keller](https://github.com/vitorkeller).
