@@ -1,0 +1,75 @@
+@startuml Container
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Diagrama de Contêiner para o Aura Music (Microsserviços)
+
+' Atores
+Person(listener, "Ouvinte", "Usuário autenticado")
+Person(admin, "Admin", "Usuário com privilégios no sistema")
+
+System_Boundary(aura_music, "Aura Music") {
+    
+    ' Frontend
+    Container(web_app, "Web App", "React, Next.js, TypeScript", "Interface do usuário para reprodução de música e painel de upload para admins")
+    
+    ' API Gateway
+    Container(api_gateway, "API Gateway", "Java", "Entrega as chamadas de API para os respectivos serviços ao mesmo tempo que administra e valida as sessões de login")
+    ContainerDb(db_log, "Database (Log)", "PostgreSQL", "Armazena chamadas realizadas e histórico de acessos/erros do gateway")
+
+    ' Filas (Mensageria)
+    ContainerQueue(fila_eventos, "Fila Kafka (Eventos)", "Apache Kafka", "Administra a fila de eventos assíncronos (ex: processamento de áudio pós-upload)")
+
+    ' Microsserviço: Autenticação/Cadastro
+    Container(api_login, "API Login e Cadastro", "Java", "Funcionalidades de login, recuperação de conta e cadastro de usuários")
+    ContainerDb(db_usuarios, "Database (Usuários)", "PostgreSQL", "Armazena dados de usuários e credenciais")
+
+    ' Microsserviço: Catálogo e Streaming
+    Container(api_musicas, "API Catálogo e Streaming", "Java", "Funcionalidades relacionadas à busca, metadados e entrega do streaming de áudio")
+    ContainerDb(db_musicas, "Database (Catálogo)", "PostgreSQL", "Armazena informações de músicas, artistas e álbuns")
+    ContainerDb(storage, "Armazenamento de Arquivos", "File System", "Armazena os arquivos físicos .mp3 e capas de álbuns")
+
+    ' Microsserviço: Playlists
+    Container(api_playlists, "API Playlists", "Java", "Funcionalidades para criação e gestão de playlists dos usuários")
+    ContainerDb(db_playlists, "Database (Playlists)", "PostgreSQL", "Armazena as relações de músicas nas playlists de cada usuário")
+
+    ' Microsserviço: Administração
+    Container(api_adm, "API ADM", "Java", "Serviços restritos de administração e upload de novas músicas")
+}
+
+' Sistemas Externos
+System_Ext(email_system, "Sistema de E-mail", "Serviço externo para envio de confirmações de conta")
+
+' Relacionamentos - Usuários para Frontend
+Rel(listener, web_app, "Acessa", "HTTPS")
+Rel(admin, web_app, "Acessa", "HTTPS")
+
+' Frontend para Gateway
+Rel(web_app, api_gateway, "API Call", "JSON/HTTPS")
+
+' Gateway para Log
+Rel(api_gateway, db_log, "Read/Write", "JDBC")
+
+' Gateway para Microsserviços
+Rel(api_gateway, api_login, "API Call", "JSON/HTTPS")
+Rel(api_gateway, api_musicas, "API Call", "JSON/HTTPS")
+Rel(api_gateway, api_playlists, "API Call", "JSON/HTTPS")
+Rel(api_gateway, api_adm, "API Call", "JSON/HTTPS")
+
+' Comunicação interna dos Microsserviços com seus bancos
+Rel(api_login, db_usuarios, "Read/Write", "JDBC")
+Rel(api_musicas, db_musicas, "Read/Write", "JDBC")
+Rel(api_musicas, storage, "Read", "I/O")
+Rel(api_playlists, db_playlists, "Read/Write", "JDBC")
+Rel(api_adm, storage, "Write (Upload)", "I/O")
+
+' Comunicação entre microsserviços (Síncrona e Assíncrona)
+Rel(api_playlists, api_musicas, "API Call (Busca dados da música)", "JSON/HTTPS")
+Rel(api_login, email_system, "API Call (Envia e-mail)", "JSON/HTTPS")
+
+' Uso da fila Kafka
+Rel(api_adm, fila_eventos, "Publica evento de novo upload", "Kafka/TCP")
+Rel(fila_eventos, api_musicas, "Consome evento para atualizar catálogo", "Kafka/TCP")
+
+@enduml

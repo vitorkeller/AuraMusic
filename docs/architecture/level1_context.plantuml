@@ -1,0 +1,23 @@
+@startuml Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Diagrama de Contexto de Sistema para o Aura Music
+
+' Atores que utilizam o sistema
+Person(listener, "Ouvinte", "Usuário autenticado que escuta músicas e gerencia suas playlists")
+Person(admin, "Admin", "Usuário com privilégios no sistema responsável por fazer o upload do catálogo de músicas e gerenciar a plataforma")
+
+' O sistema que estamos construindo
+System(aura_music, "Aura Music", "Plataforma gratuita de streaming de música, com acesso restrito a usuários cadastrados")
+
+' Sistemas externos
+System_Ext(email_system, "Sistema de E-mail", "Serviço externo que envia e-mails de confirmação de conta e redefinição de senha")
+
+' Relações entre os elementos
+Rel(listener, aura_music, "[Se cadastra e requisita serviços]")
+Rel(admin, aura_music, "[Realiza atividades administrativas sobre a plataforma e usuários]")
+
+Rel(aura_music, email_system, "[Usado para enviar e-mails aos usuários referente ao cadastro]")
+@enduml"
