@@ -1,8 +1,6 @@
 @startuml Context
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
-LAYOUT_WITH_LEGEND()
-
 title Diagrama de Contexto de Sistema para o Aura Music
 
 ' Atores que utilizam o sistema

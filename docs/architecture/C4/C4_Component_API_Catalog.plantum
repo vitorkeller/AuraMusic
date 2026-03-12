@@ -1,0 +1,41 @@
+@startuml Component_Catálogo_Streaming
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Diagrama de Componentes para o Aura Music - API Catálogo e Streaming
+
+' Contêineres e Sistemas Externos que interagem com este contêiner
+Container(api_gateway, "API Gateway", "Java", "Roteamento e validação de sessões")
+Container(api_playlists, "API Playlists", "Java", "Funcionalidades de playlists")
+ContainerQueue(fila_eventos, "Fila Kafka (Eventos)", "Apache Kafka", "Fila de eventos assíncronos")
+ContainerDb(db_musicas, "Database (Catálogo)", "PostgreSQL", "Armazena informações de músicas")
+ContainerDb(storage, "Armazenamento de Arquivos", "File System", "Arquivos físicos .mp3 e capas")
+
+Container_Boundary(api_musicas, "API Catálogo e Streaming") {
+    
+    Component(music_controller, "Music Controller", "REST Controller (Spring/Java)", "Recebe requisições de busca, metadados e chamadas de streaming de áudio")
+    Component(kafka_consumer, "Upload Event Consumer", "Kafka Listener", "Ouve eventos de novas músicas recém-processadas para atualização no catálogo")
+    
+    Component(catalog_service, "Catalog Service", "Service", "Lógica de negócios para busca e paginação do catálogo de músicas")
+    Component(streaming_service, "Streaming Service", "Service", "Lógica para fragmentação (chunking) e entrega do streaming de áudio")
+    
+    Component(music_repo, "Music Repository", "Data Access (JPA/Hibernate)", "Interface de abstração para acesso ao banco de dados relacional")
+    Component(file_adapter, "File Storage Adapter", "I/O Component", "Interface responsável por ler e carregar os arquivos físicos do sistema")
+
+    ' Relações internas
+    Rel(music_controller, catalog_service, "Usa para buscas", "Chamada de método")
+    Rel(music_controller, streaming_service, "Usa para reprodução", "Chamada de método")
+    Rel(kafka_consumer, catalog_service, "Informa novos uploads", "Chamada de método")
+    
+    Rel(catalog_service, music_repo, "Lê/Grava metadados", "Chamada de método")
+    Rel(streaming_service, file_adapter, "Lê bytes de áudio", "Chamada de método")
+}
+
+' Relações externas
+Rel(api_gateway, music_controller, "Faz requisições de API", "JSON/HTTPS")
+Rel(api_playlists, music_controller, "Busca dados da música", "JSON/HTTPS")
+Rel(fila_eventos, kafka_consumer, "Consome eventos de upload", "Kafka/TCP")
+
+Rel(music_repo, db_musicas, "Read/Write", "JDBC")
+Rel(file_adapter, storage, "Read", "I/O")
+
+@enduml

@@ -27,6 +27,83 @@ Utilizaremos o padrão arquitetural **MVC** (Model-View-Controller) no design da
 ## Engenharia e Produção (Deploy e CI/CD)
 O repositório está configurado com um pipeline de Integração e Entrega Contínuas (CI/CD). A cada novo *push* na branch principal, o pipeline executa automaticamente os testes unitários. Se aprovados, ocorre o processo de *build* e o deploy é realizado automaticamente em um provedor de nuvem, deixando o sistema em ambiente de produção online de forma ágil e segura.
 
+## Requisitos do Sistema
+
+### Requisitos Funcionais (RF)
+
+* **RF01 - Controles de Reprodução (Play/Pause/Skip)**
+  * **Descrição:** Implementar as funções básicas de controle do fluxo de áudio para permitir a interação do usuário com a música.
+  * **Critérios de Aceite:**
+    * Alternar ícones de Play e Pause dinamicamente conforme o estado do áudio.
+    * Botão "Next" deve carregar a próxima faixa da lista.
+    * Botão "Prev" deve reiniciar a faixa atual ou voltar para a anterior.
+
+
+* **RF02 - Barra de Progresso Interativa (Seek Bar)**
+  * **Descrição:** Visualizar o tempo decorrido da música e permitir o salto para trechos específicos da timeline.
+  * **Critérios de Aceite:**
+    * Atualizar a barra em tempo real conforme o progresso do áudio.
+    * Formatar tempo decorrido e total no padrão `mm:ss`.
+    * Implementar funcionalidade de clique ou arraste para navegar na posição do áudio.
+
+
+* **RF03 - Controle de Volume**
+  * **Descrição:** Permitir que o usuário ajuste a intensidade sonora da aplicação ou silencie o áudio rapidamente.
+  * **Critérios de Aceite:**
+    * Implementar input range funcional para ajuste de volume (0 a 100).
+    * Criar botão de Mute que preserva o estado do volume anterior ao ser desativado.
+    * Exibir feedback visual no ícone de volume conforme o nível selecionado.
+
+### Requisitos Não Funcionais (RNF)
+
+* **RNF01 - Interface Responsiva (Mobile-First)**
+  * **Descrição:** Garantir que os controles do player sejam acessíveis e o layout se ajuste corretamente a diferentes tamanhos de tela.
+  * **Critérios de Aceite:**
+    * Utilizar breakpoints do Tailwind CSS para adaptação de layout (Mobile/Desktop).
+    * Garantir áreas de clique (touch targets) de no mínimo 44px para dispositivos móveis.
+    * Otimizar o carregamento de imagens (capas dos álbuns) para conexões móveis.
+
+
+* **RNF02 - Acessibilidade Web (a11y)**
+  * **Descrição:** Tornar o player navegável via teclado e compatível com tecnologias assistivas para garantir inclusão.
+  * **Critérios de Aceite:**
+    * Adicionar `aria-label` em todos os botões que utilizam apenas ícones.
+    * Suporte completo para navegação e acionamento via teclas `TAB` e `Espaço`.
+    * Garantir contraste de cores adequado entre os textos e o fundo da aplicação.
+
+## Arquitetura do Sistema (Modelo C4)
+
+A arquitetura do Aura Music foi mapeada utilizando o modelo C4 para facilitar a compreensão do fluxo de dados e da comunicação entre os microsserviços.
+
+### Nível 1: Contexto
+Visão geral do sistema, mostrando os atores (Ouvinte e Admin) e as integrações externas.
+
+![Diagrama de Contexto](docs/architecture/C4/C4_Context.png)
+
+### Nível 2: Contêineres
+Visão arquitetural mostrando os microsserviços, o frontend, o API Gateway, bancos de dados e mensageria.
+
+![Diagrama de Contêineres](docs/architecture/C4/C4_Container.png)
+
+### Nível 3: Componentes
+Detalhamento interno dos principais microsserviços do Aura Music:
+
+**API Catálogo e Streaming:**
+
+![Componentes - Catálogo e Streaming](docs/architecture/C4/C4_Component_API_Catalog.png)
+
+**API Login e Cadastro:**
+
+![Componentes - Login e Cadastro](docs/architecture/C4/C4_Component_API_Login.png)
+
+**API Playlists:**
+
+![Componentes - Playlists](docs/architecture/C4/C4_Component_API_Playlists.png)
+
+**API Admin:**
+
+![Componentes - ADM](docs/architecture/C4/C4_Component_API_Admin.png)
+
 ## Atribuições e Responsabilidades
 - Protótipo e Front-end: [Lucas Moraes](https://github.com/hub-Moraes).
 - Banco de Dados e Back-end: [Vitor Keller](https://github.com/vitorkeller).
