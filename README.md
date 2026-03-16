@@ -1,5 +1,12 @@
 # 🎵 Aura Music
 
+<img width="1920" height="1248" alt="Home" src="https://github.com/user-attachments/assets/a8f68531-d933-4634-b0a1-a78abe26fbd6" />
+
+## Links Protótipo:
+[Web](https://www.figma.com/proto/0dhsr7aXEIwemElDrDjzRn/Aura-Music?node-id=7-7&t=Awq4McOkmmOavw87-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=7%3A7&show-proto-sidebar=1)
+|
+[Mobile](https://www.figma.com/proto/0dhsr7aXEIwemElDrDjzRn/Aura-Music?node-id=34153-340&p=f&t=502gF1sHhZuRN09t-0&scaling=scale-down&content-scaling=fixed&page-id=34153%3A337&starting-point-node-id=34153%3A340)
+
 ## Metodologia: Abordagem Baseada em Projeto
 Este projeto foi concebido como um desafio prático, com o objetivo de projetar, desenvolver e colocar em produção uma aplicação web funcional. A abordagem prioriza a resolução de um problema de domínio real, explorando tecnologias tanto no lado do cliente (frontend) quanto no lado do servidor (backend), além de aplicar boas práticas de engenharia de software e infraestrutura.
 
