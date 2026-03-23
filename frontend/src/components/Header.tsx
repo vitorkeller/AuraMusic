@@ -15,7 +15,7 @@ export function Header(){
                 </div>
             </div>
 
-            <Image className="z-0 absolute top-0 w-full mask-top" src="/img/page-top-bg.jpg" alt="Background" width={2608} height={188} />                
+            <Image className="z-0 absolute top-0 w-full" src="/img/page-top-bg.jpg" alt="Background" width={2608} height={188} />                
         </header>
     );
 }
