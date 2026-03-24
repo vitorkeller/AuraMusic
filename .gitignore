@@ -1,0 +1,14 @@
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Compilação e Dependências
+backend/target/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# Segredos e Ambientes
+.env
+backend/src/main/resources/.env

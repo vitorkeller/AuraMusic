@@ -1,4 +1,5 @@
-package com.auramusic.backend.user;
+package com.auramusic.backend.domain.user;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -11,11 +12,11 @@ import jakarta.persistence.*;
 @AllArgsConstructor
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String username;
-    private String email;
-    private String password;
+	private String username;
+	private String email;
+	private String password;
 }
