@@ -1,0 +1,30 @@
+@startuml Component_Playlists
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Diagrama de Componentes para o Aura Music - API Playlists
+
+' Contêineres que interagem com este contêiner
+Container(api_gateway, "API Gateway", "Java", "Roteamento e validação de sessões")
+Container(api_musicas, "API Catálogo e Streaming", "Java", "Fornece dados das músicas")
+ContainerDb(db_playlists, "Database (Playlists)", "PostgreSQL", "Armazena relações de músicas e playlists")
+
+Container_Boundary(api_playlists_boundary, "API Playlists") {
+    
+    Component(playlist_controller, "Playlist Controller", "REST Controller", "Recebe requisições para criar, editar, excluir e buscar playlists")
+    Component(playlist_service, "Playlist Service", "Service", "Regras de negócio, validação de limite de músicas e ordenação da playlist")
+    
+    Component(music_client, "Music Catalog Client", "HTTP Client (Feign/RestTemplate)", "Cliente interno para buscar e validar metadados de músicas no catálogo")
+    Component(playlist_repo, "Playlist Repository", "Data Access (JPA)", "Interface de abstração para acesso ao banco de dados relacional das playlists")
+
+    ' Relações internas
+    Rel(playlist_controller, playlist_service, "Delega requisições", "Chamada de método")
+    Rel(playlist_service, music_client, "Valida existência da música", "Chamada de método")
+    Rel(playlist_service, playlist_repo, "Lê/Grava dados da playlist", "Chamada de método")
+}
+
+' Relações externas
+Rel(api_gateway, playlist_controller, "Faz requisições de API", "JSON/HTTPS")
+Rel(music_client, api_musicas, "Busca dados da música", "JSON/HTTPS")
+Rel(playlist_repo, db_playlists, "Read/Write", "JDBC")
+
+@enduml

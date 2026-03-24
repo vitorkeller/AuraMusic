@@ -1,0 +1,30 @@
+@startuml Component_ADM
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Diagrama de Componentes para o Aura Music - API ADM
+
+' Contêineres que interagem com este contêiner
+Container(api_gateway, "API Gateway", "Java", "Roteamento e validação de sessões (Acesso Restrito)")
+ContainerDb(storage, "Armazenamento de Arquivos", "File System", "Armazena os arquivos físicos .mp3 e capas de álbuns")
+ContainerQueue(fila_eventos, "Fila Kafka (Eventos)", "Apache Kafka", "Administra a fila de eventos assíncronos")
+
+Container_Boundary(api_adm_boundary, "API ADM") {
+    
+    Component(admin_controller, "Admin Controller", "REST Controller", "Endpoints protegidos para upload de músicas e gestão da plataforma")
+    Component(upload_service, "Upload & Processing Service", "Service", "Valida formatos de arquivo, extrai metadados básicos e coordena o upload")
+    
+    Component(storage_adapter, "Storage Adapter", "I/O Component", "Responsável por gravar de forma segura os binários no sistema de arquivos")
+    Component(event_publisher, "Event Publisher", "Kafka Producer", "Gera e publica eventos notificando que uma nova música está pronta para o catálogo")
+
+    ' Relações internas
+    Rel(admin_controller, upload_service, "Delega requisições de upload", "Chamada de método")
+    Rel(upload_service, storage_adapter, "Envia binários para gravação", "Chamada de método")
+    Rel(upload_service, event_publisher, "Aciona notificação de sucesso", "Chamada de método")
+}
+
+' Relações externas
+Rel(api_gateway, admin_controller, "Faz requisições de API (Admin)", "JSON/HTTPS")
+Rel(storage_adapter, storage, "Write (Upload)", "I/O")
+Rel(event_publisher, fila_eventos, "Publica evento de novo upload", "Kafka/TCP")
+
+@enduml

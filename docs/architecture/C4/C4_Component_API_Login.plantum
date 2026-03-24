@@ -1,0 +1,32 @@
+@startuml Component_Login_Cadastro
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Diagrama de Componentes para o Aura Music - API Login e Cadastro
+
+' Contêineres e Sistemas Externos que interagem com este contêiner
+Container(api_gateway, "API Gateway", "Java", "Roteamento e validação de sessões")
+ContainerDb(db_usuarios, "Database (Usuários)", "PostgreSQL", "Armazena dados de usuários e credenciais")
+System_Ext(email_system, "Sistema de E-mail", "Serviço externo para confirmações")
+
+Container_Boundary(api_login, "API Login e Cadastro") {
+    
+    Component(auth_controller, "Auth Controller", "REST Controller", "Endpoints para login, registro e recuperação de senha")
+    Component(auth_service, "Authentication Service", "Service", "Lógica de validação de credenciais, geração de tokens e regras de cadastro")
+    Component(password_encoder, "Password Encoder", "Security Component", "Responsável pelo hash e validação de senhas criptografadas")
+    
+    Component(user_repo, "User Repository", "Data Access", "Acesso aos dados de usuários no banco")
+    Component(email_adapter, "Email Service Adapter", "HTTP Client", "Adapta e formata os dados para o serviço externo de e-mails")
+
+    ' Relações internas
+    Rel(auth_controller, auth_service, "Delega requisições", "Chamada de método")
+    Rel(auth_service, password_encoder, "Hasheia/Valida senhas", "Chamada de método")
+    Rel(auth_service, user_repo, "Consulta/Salva usuário", "Chamada de método")
+    Rel(auth_service, email_adapter, "Aciona envio de e-mail", "Chamada de método")
+}
+
+' Relações externas
+Rel(api_gateway, auth_controller, "Faz requisições de API", "JSON/HTTPS")
+Rel(user_repo, db_usuarios, "Read/Write", "JDBC")
+Rel(email_adapter, email_system, "Envia payload de e-mail", "JSON/HTTPS")
+
+@enduml
