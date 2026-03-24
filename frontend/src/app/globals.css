@@ -24,3 +24,10 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+body {
+  background-image: url('/img/page-top-bg.jpg');
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: 100% auto;
+  }
