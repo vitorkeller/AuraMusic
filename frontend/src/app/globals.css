@@ -24,9 +24,9 @@ body {
 }
 
 body {
-  background-image: url('/img/page-top-bg.jpg');
+  background-image: url('/img/page-top-bg.jpg'), url('/img/page-bottom-bg.jpg');
   background-repeat: no-repeat;
-  background-position: top center;
+  background-position: top center, bottom center;
   background-size: 100% auto;
   }
 
