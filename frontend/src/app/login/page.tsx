@@ -1,7 +1,14 @@
+"use client"
+
+import { useState } from "react"
 import Image from "next/image";
 import Link from "next/link";
+import { InputField } from "@/src/components/InputField";
 
 export default function Login(){
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
     return(
         <div className="grid grid-rows-4 justify-items-center min-h-screen">
             <Link href="/">
@@ -13,17 +20,23 @@ export default function Login(){
                     <h1 className="flex justify-center text-3xl pt-8 pb-2 font-bold">Login</h1>
 
                     <div className="flex flex-col self-center">
-                        <p className="flex flex-row pl-5 pb-2">Usuário</p>
-                        <div className="flex items-center justify-center w-120 border border-white/10 rounded-full bg-white/8 hover:bg-white/12 backdrop-blur-md shadow-inner shadow-black/30">
-                            <Image className="p-4 ml-2 mr-2" src="/img/user.png" alt="User" width={50} height={50} />
-                            <input className="w-full outline-none bg-transparent" type="text" placeholder="Digite seu usuário..."/>
-                        </div>
+                        <InputField
+                            label="Usuário"
+                            type="text"
+                            placeholder="Digite seu usuário..."
+                            icon="/img/user.png"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
 
-                        <p className="flex flex-row pl-5 pb-2 pt-5">Senha</p>
-                        <div className="flex items-center justify-center w-120 border border-white/10 rounded-full bg-white/8 hover:bg-white/12 backdrop-blur-md shadow-inner shadow-black/30">
-                            <Image className="p-4 ml-2 mr-2" src="/img/pin.png" alt="Pin" width={50} height={50} />
-                            <input className="w-full outline-none bg-transparent" type="password" placeholder="Digite sua senha..."/>
-                        </div>
+                        <InputField
+                            label="Senha"
+                            type="password"
+                            placeholder="Digite sua senha..."
+                            icon="/img/pin.png"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
 
                         <button className="flex items-center justify-center w-120 h-13 mt-7 border border-white/10 rounded-full bg-blue-800 duration-300 hover:bg-blue-700 backdrop-blur-md shadow-inner shadow-black/30 hover:scale-102 hover:font-bold">
                             <span className="text-white font-medium">Entrar</span>
