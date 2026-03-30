@@ -19,16 +19,14 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/img/favicon_black.svg",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/img/favicon_white.svg",
-        media: "(prefers-color-scheme: dark)",
-      },
-    ],
-  },
+        url: "/img/icon_black.png",
+        sizes: "16x16",
+        type: "image/png"
+      }
+    ]
+  }
 };
+
 
 export default function RootLayout({
   children,
