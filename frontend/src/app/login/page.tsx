@@ -1,38 +1,103 @@
+"use client"
+
+import { useState } from "react"
 import Image from "next/image";
+import Link from "next/link";
+import { InputField } from "@/src/components/InputField";
+import Button from "@/src/components/Button";
 
 export default function Login(){
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
+
+    const handleLogin = async () => {
+    setError("")
+
+    if (!username || !password) {
+        setError("Preencha todos os campos")
+        return
+    }
+
+    setLoading(true)
+
+    try {
+        await new Promise((resolve) => setTimeout(resolve, 1500))
+
+        if (username !== "admin" || password !== "123") {
+            throw new Error("Usuário ou senha inválidos")
+        }
+
+        localStorage.setItem("token", "fake-token")
+
+        window.location.href = "/"
+
+    } catch (err: any) {
+        setError(err.message)
+    } finally {
+        setLoading(false)
+    }
+}
+
     return(
         <div className="grid grid-rows-4 justify-items-center min-h-screen">
-            <Image className="row-span-1 pt-30 pb-2" src="/img/logo_black1.png" alt="Logo" width={310} height={10} />
+            <Link href="/">
+                <Image className="row-span-1 pt-30" src="/img/logo_black1.png" alt="Logo" width={310} height={10} />
+            </Link>
             
-            <div className="row-span-3 self-end w-170 h-150 border border-white/10 rounded-t-2xl bg-white/8 backdrop-blur-md shadow-inner shadow-black/30">
+            <div className="mt-6 row-span-3 self-end w-158 h-158 border border-white/10 rounded-t-2xl bg-white/8 backdrop-blur-md shadow-inner shadow-black/30">
                 <div className="flex flex-col h-full">
-                    <h1 className="flex justify-center text-3xl pt-8 pb-6 font-bold">Login</h1>
+                    <h1 className="flex justify-center text-3xl pt-8 pb-2 font-bold">Login</h1>
 
                     <div className="flex flex-col self-center">
-                        <p className="flex flex-row pl-5 pb-2">Usuário</p>
-                        <div className="flex items-center justify-center w-130 border border-white/10 rounded-full bg-white/8 backdrop-blur-md shadow-inner shadow-black/30">
-                            <Image className="p-4 ml-2 mr-2" src="/img/user.png" alt="User" width={50} height={50} />
-                            <input className="w-full outline-none bg-transparent" type="text" placeholder="Digite seu usuário..."/>
-                        </div>
+                        <InputField
+                            label="Usuário"
+                            type="text"
+                            placeholder="Digite seu usuário..."
+                            icon="/img/user.png"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
 
-                        <p className="flex flex-row pl-5 pb-2 pt-7">Senha</p>
-                        <div className="flex items-center justify-center w-130 border border-white/10 rounded-full bg-white/8 backdrop-blur-md shadow-inner shadow-black/30">
-                            <Image className="p-4 ml-2 mr-2" src="/img/pin.png" alt="Pin" width={50} height={50} />
-                            <input className="w-full outline-none bg-transparent" type="password" placeholder="Digite sua senha..."/>
-                        </div>
+                        <InputField
+                            label="Senha"
+                            type="password"
+                            placeholder="Digite sua senha..."
+                            icon="/img/pin.png"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
 
-                        <button className="flex items-center justify-center w-130 h-13 mt-7 border border-white/10 rounded-full bg-blue-800 00 backdrop-blur-md shadow-inner shadow-black/30">
-                            <span className="text-white">Entrar</span>
-                        </button >
+                        <Button onClick={handleLogin} disabled={loading}>
+                            {loading ? (
+                                <Image src="/img/loading.gif" alt="loading" width={30} height={30} />
+                            ) : (
+                                <span className="text-white font-medium">Entrar</span>
+                            )}
+                        </Button>
 
-                        <div className="flex items-center w-full my-6">
+                        {error && (
+                            <span className="text-red-500 text-sm mt-3 text-center">
+                                {error}
+                            </span>
+                        )}
+
+                        <div className="flex items-center w-full my-8">
                             <div className="flex-1 h-px ml-2 bg-white/30"></div>
                            
                             <span className="px-4 text-white/30 text-sm">Ou continue com</span>
                             
                             <div className="flex-1 h-px mr-2 bg-white/30"></div>
                         </div>
+
+                        
+                        <Button variant="secondary">
+                            <Image src="/img/IconGoogle.png" alt="Google" width={25} height={25} />
+                            <span className="text-black">Entrar com Google</span>
+                        </Button>
+
+                        <span className="flex justify-center mt-18 px-4 text-white/80 text-md">Aura Music © 2026 </span>
                     </div>
                 </div>
             </div>        
