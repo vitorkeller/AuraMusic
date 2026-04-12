@@ -43,5 +43,14 @@ Thumbs.db
 
 ### Local Configuration (Segurança!) ###
 .env
+<<<<<<< Updated upstream
 bin/
 src/main/resources/application-local.properties
+=======
+
+### Banco de Dados Local (H2) ###
+*.mv.db
+*.trace.db
+/backend/data/
+/data/
+>>>>>>> Stashed changes

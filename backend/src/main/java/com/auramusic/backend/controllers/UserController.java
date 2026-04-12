@@ -1,6 +1,10 @@
-package com.auramusic.backend.domain.user;
+package com.auramusic.backend.controllers;
 
 import org.springframework.web.bind.annotation.*;
+
+import com.auramusic.backend.entities.User;
+import com.auramusic.backend.services.UserService;
+
 import java.util.List;
 
 @RestController

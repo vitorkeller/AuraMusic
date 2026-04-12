@@ -34,6 +34,44 @@ Utilizaremos o padrão arquitetural **MVC** (Model-View-Controller) no design da
 ## Engenharia e Produção (Deploy e CI/CD)
 O repositório está configurado com um pipeline de Integração e Entrega Contínuas (CI/CD). A cada novo *push* na branch principal, o pipeline executa automaticamente os testes unitários. Se aprovados, ocorre o processo de *build* e o deploy é realizado automaticamente em um provedor de nuvem, deixando o sistema em ambiente de produção online de forma ágil e segura.
 
+## Como rodar o projeto localmente
+
+Este projeto é dividido em duas partes: o Backend (Spring Boot) e o Frontend (Next.js).
+
+### Backend (Java/Spring Boot)
+1. Abra a pasta backend na sua IDE ou terminal.
+2. Certifique-se de ter o Java 21 instalado.
+3. Rode o comando:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+O servidor iniciará na porta 8080.
+
+## Acesso ao Banco de Dados (H2 Console)
+O projeto utiliza o banco de dados H2 persistido em arquivo local para facilitar a avaliação. A tabela e os usuários iniciais são gerados automaticamente ao iniciar o backend.
+
+URL de acesso: http://localhost:8080/h2-console
+
+Driver Class: org.h2.Driver
+
+JDBC URL: jdbc:h2:file:./backend/data/auradb
+
+User Name: sa
+
+Password: (Deixe em branco)
+
+### Frontend (React/Next.js)
+1. Abra um novo terminal na pasta frontend.
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+3. Inicie o servidor de desenvolvimento:
+   ```bash
+   npm run dev
+   ```
+Acesse a aplicação em: http://localhost:3000
+
 ## Requisitos do Sistema
 
 ### Requisitos Funcionais (RF)
