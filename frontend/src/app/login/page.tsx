@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { InputField } from "@/src/components/InputField";
 import Button from "@/src/components/Button";
+import { signIn } from "next-auth/react";
 
 export default function Login(){
     const [username, setUsername] = useState("");
@@ -22,22 +23,32 @@ export default function Login(){
 
     setLoading(true)
 
-    try {
-        await new Promise((resolve) => setTimeout(resolve, 1500))
+		try {
+			const response = await fetch("http://localhost:8080/api/auth/login", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ username, password })
+			});
 
-        if (username !== "admin" || password !== "123") {
-            throw new Error("Usuário ou senha inválidos")
-        }
+			if (!response.ok) {
+				throw new Error("Usuário ou senha inválidos");
+			}
 
-        localStorage.setItem("token", "fake-token")
+			const data = await response.json();
 
-        window.location.href = "/"
+			localStorage.setItem("token", data.token);
+			localStorage.setItem("userRole", data.role);
+			localStorage.setItem("username", data.username);
 
-    } catch (err: any) {
-        setError(err.message)
-    } finally {
-        setLoading(false)
-    }
+			window.location.href = "/";
+
+		} catch (err: any) {
+			setError(err.message)
+		} finally {
+			setLoading(false)
+		}
 }
 
     return(
@@ -91,8 +102,12 @@ export default function Login(){
                             <div className="flex-1 h-px mr-2 bg-white/30"></div>
                         </div>
 
-                        
-                        <Button variant="secondary">
+        
+                        {/* 2. Adicione o evento onClick no seu botão secundário */}
+                        <Button 
+                            variant="secondary" 
+                            onClick={() => signIn("google", { callbackUrl: "/" })}
+                        >
                             <Image src="/img/IconGoogle.png" alt="Google" width={25} height={25} />
                             <span className="text-black">Entrar com Google</span>
                         </Button>
