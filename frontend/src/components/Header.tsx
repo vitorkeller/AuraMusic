@@ -1,20 +1,25 @@
 import Image from "next/image";
-import Link from "next/link";
 
-export function Header(){
-    return(
-        <header>
-            <div className="grid grid-cols-[auto_1fr] ml-7 mr-20 pt-6 gap-8 items-center">
-                <Link href={"/"}>
-                    <Image src="/img/icon_black.png" alt="Logo" width={45} height={45} />
-                </Link>
-                
-                <div className="flex  items-center border border-white/10 rounded-full bg-white/8 backdrop-blur-md shadow-inner shadow-black/30">
-                    <Image className="p-4 ml-2 mr-2" src="/img/search.png" alt="Lupa" width={50} height={50} />
-                    <input className="w-full outline-none bg-transparent" type="text" placeholder="Search Artists"/>
-                </div>
+export function Header() {
+    return (
+        // Sem 'sticky', sem 'fixed'. O 'px-8' garante o mesmo alinhamento do conteúdo de baixo.
+        <header className="w-full px-8 pt-8 pb-4">
+            
+            {/* A barra vai ocupar todo o espaço disponível dentro do recuo px-8 */}
+            <div className="flex items-center border border-white/10 rounded-full bg-white/5 backdrop-blur-xl shadow-lg w-full transition-all hover:bg-white/10">
+                <Image 
+                    className="ml-6 mr-3 opacity-60" 
+                    src="/img/search.png" 
+                    alt="Lupa" 
+                    width={26} 
+                    height={26} 
+                />
+                <input 
+                    className="w-full outline-none bg-transparent text-white placeholder-gray-400 py-4 pr-8 text-lg font-medium tracking-wide rounded-r-full" 
+                    type="text" 
+                    placeholder="Search artists"
+                />
             </div>                
         </header>
     );
 }
-             
