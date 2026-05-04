@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
@@ -39,17 +40,20 @@ public class AuthControllerTest {
 	@MockBean
 	private UserRepository userRepository; // Mock do repositório - não acessa BD real
 
+	// Instanciamos o encoder uma vez para usar nos testes
+	private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
 	/**
 	 * Cenário: Login com credenciais válidas (admin/123)
 	 * Esperado: Status 200 OK + JSON com username, role e token
 	 */
 	@Test
 	public void deveRetornarSucesso_QuandoLoginEValido() throws Exception {
-		// Arrange: Prepara um usuário mockado
+		// Arrange: Prepara um usuário mockado com senha CRIPTOGRAFADA
 		User usuarioAdmin = new User();
 		usuarioAdmin.setId(1L);
 		usuarioAdmin.setUsername("admin");
-		usuarioAdmin.setPassword("123");
+		usuarioAdmin.setPassword(encoder.encode("123")); // <-- A MÁGICA ACONTECE AQUI
 		usuarioAdmin.setEmail("admin@auramusic.com");
 		usuarioAdmin.setRole("ADMIN");
 
@@ -57,7 +61,7 @@ public class AuthControllerTest {
 		when(userRepository.findByUsername("admin")).thenReturn(Optional.of(usuarioAdmin));
 
 		// Act & Assert: Envia requisição POST e valida resposta
-		String jsonBody = "{\"username\":\"admin\",\"password\":\"123\"}";
+		String jsonBody = "{\"username\":\"admin\",\"password\":\"123\"}"; // O JSON envia o texto puro
 
 		mockMvc.perform(post("/api/auth/login")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -74,11 +78,11 @@ public class AuthControllerTest {
 	 */
 	@Test
 	public void deveRetornarNaoAutorizado_QuandoSenhaInvalida() throws Exception {
-		// Arrange: Usuário existe, mas senha está diferente
+		// Arrange: Usuário existe, com senha criptografada
 		User usuarioAdmin = new User();
 		usuarioAdmin.setId(1L);
 		usuarioAdmin.setUsername("admin");
-		usuarioAdmin.setPassword("123"); // Senha correta no banco
+		usuarioAdmin.setPassword(encoder.encode("123")); // <-- Senha correta no banco (hasheada)
 		usuarioAdmin.setEmail("admin@auramusic.com");
 		usuarioAdmin.setRole("ADMIN");
 
