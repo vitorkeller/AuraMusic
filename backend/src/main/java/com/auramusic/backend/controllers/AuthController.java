@@ -6,6 +6,7 @@ import com.auramusic.backend.repositories.UserRepository;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -27,7 +28,12 @@ public class AuthController {
 	public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 		Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
 
-		if (userOpt.isPresent() && userOpt.get().getPassword().equals(request.getPassword())) {
+		// Instancia o decodificador BCrypt
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+		// Troca o .equals() pelo encoder.matches() (que compara o texto puro com o
+		// Hash)
+		if (userOpt.isPresent() && encoder.matches(request.getPassword(), userOpt.get().getPassword())) {
 			Map<String, String> response = new HashMap<>();
 			response.put("message", "Login realizado com sucesso");
 			response.put("username", userOpt.get().getUsername());
@@ -35,6 +41,7 @@ public class AuthController {
 			response.put("token", "fake-token-por-enquanto");
 			return ResponseEntity.ok(response);
 		}
+
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário ou senha inválidos");
 	}
 }
