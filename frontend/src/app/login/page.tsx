@@ -103,7 +103,6 @@ export default function Login(){
                         </div>
 
         
-                        {/* 2. Adicione o evento onClick no seu botão secundário */}
                         <Button 
                             variant="secondary" 
                             onClick={() => signIn("google", { callbackUrl: "/" })}

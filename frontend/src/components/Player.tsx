@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { 
   Play, Pause, SkipBack, SkipForward, 
   Volume2, Maximize2, Shuffle, Repeat, Heart, ListMusic 
 } from "lucide-react";
 
 export default function Player() {
+  const pathname = usePathname();
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(66);
@@ -36,6 +38,8 @@ export default function Player() {
 
     return () => clearInterval(interval);
   }, [isPlaying]);
+
+  if (pathname === "/login") return null;
 
   const currentSeconds = Math.floor((progress / 100) * TOTAL_SECONDS);
 
